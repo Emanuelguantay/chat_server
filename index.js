@@ -1,4 +1,9 @@
 const express = require('express');
+//DB Config
+const { dbConection }=require('./database/config');
+dbConection();
+
+
 const app = express();
 const path = require('path');
 require('dotenv').config();
