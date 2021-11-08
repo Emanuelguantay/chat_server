@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 
-const dbConection = () =>{
+const dbConnection = async() =>{
     try{
-
+        console.log('INIT DB CONFIG')
     }catch(e){
         console.log(e);
         throw new Error('Error en la base de datos');
@@ -11,5 +11,5 @@ const dbConection = () =>{
 }
 
 module.exports = {
-    dbConection
+    dbConnection
 }

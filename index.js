@@ -1,7 +1,7 @@
 const express = require('express');
 //DB Config
-const { dbConection }=require('./database/config');
-dbConection();
+const { dbConnection }=require('./database/config');
+dbConnection();
 
 
 const app = express();
