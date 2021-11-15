@@ -2,6 +2,7 @@ const { response, request } = require('express');
 const bcrypt = require('bcryptjs');
 const User = require('../models/user');
 const { generateJWT } = require('../helpers/jwt');
+const { validateField } = require('../middlewares/validate-field');
 
 const createUser = async (req = request, resp = response) => {
 
@@ -45,6 +46,56 @@ const createUser = async (req = request, resp = response) => {
     
 }
 
+
+const login = async (req = request, resp = response) => {
+
+    const { email, password } = req.body;
+
+    try {
+
+        const user = new User(req.body);
+
+        const userDB = await User.findOne({email});
+        //Validar usuario
+        if (!userDB) {
+            return resp.status(400).json({
+                ok: false,
+                msg: 'Email no encontrado'
+            });
+        }
+
+        //Validar password
+        const validatePassword = bcrypt.compareSync(password, userDB.password);
+
+        if (!validatePassword){
+            return resp.status(400).json({
+                ok: false,
+                msg: 'Password no valida'
+            });
+        }
+
+        //Generar JWT
+        const token = await generateJWT(userDB.id);
+        
+        resp.json({
+            ok: true,
+            msg: 'Login',
+            usuario: userDB,
+            token
+            //token
+        });
+    } catch (error) {
+        console.log(error);
+        resp.status(500).json({
+            ok: false,
+            msg: 'Hable con el administrador'
+        });
+    }
+
+    
+}
+
 module.exports = {
-    createUser
+    createUser,
+    login
 }
