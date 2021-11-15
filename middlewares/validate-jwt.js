@@ -2,6 +2,9 @@ const { request } = require('express');
 const jwt = require('jsonwebtoken');
 
 const validateJWT = (req = request, res, next)=> {
+    //x-token o Authorization
+
+    //Leer token
     const token = req.header('x-token');
 
     if ( !token){
@@ -15,6 +18,7 @@ const validateJWT = (req = request, res, next)=> {
     try {
 
         const uid = jwt.verify(token, process.env.JWT_KEY);
+        req.uid = uid;
         next();
     } catch (error) {
         return res.status(401).json({
