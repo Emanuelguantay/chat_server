@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs');
 const User = require('../models/user');
 const { generateJWT } = require('../helpers/jwt');
 const { validateField } = require('../middlewares/validate-field');
+const jwt = require('jsonwebtoken');
 
 const createUser = async (req = request, resp = response) => {
 
@@ -96,10 +97,21 @@ const login = async (req = request, resp = response) => {
 }
 
 const renewToken = async (req = request, resp = response) => {
+
+    //obtener uid
+    const uid = req.uid;
+
+    // obtener nuevo token
+    console.log("tokenn")
+    const token = await generateJWT(uid);
+
+    const user = await User.findById(uid.uid);
+    
     resp.status(500).json({
         ok: false,
         msg: 'renew',
-        uid: req.uid
+        user,
+        token
     });
 }
 
