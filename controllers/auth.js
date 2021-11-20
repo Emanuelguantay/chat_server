@@ -81,7 +81,7 @@ const login = async (req = request, resp = response) => {
         resp.json({
             ok: true,
             msg: 'Login',
-            usuario: userDB,
+            user: userDB,
             token
             //token
         });
@@ -100,14 +100,12 @@ const renewToken = async (req = request, resp = response) => {
 
     //obtener uid
     const uid = req.uid;
-
     // obtener nuevo token
     console.log("tokenn")
     const token = await generateJWT(uid);
-
     const user = await User.findById(uid.uid);
     
-    resp.status(500).json({
+    resp.status(200).json({
         ok: false,
         msg: 'renew',
         user,
